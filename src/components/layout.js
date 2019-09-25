@@ -1,7 +1,7 @@
 import React from "react"
 import { Link } from "gatsby"
 import { rhythm } from "../utils/typography"
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence} from 'framer-motion'
 
 const timeDuration = 0.3
 
@@ -29,9 +29,8 @@ const variants = {
   },
 }
 
-class Layout extends React.Component {
-  render() {
-    const { location, title, children } = this.props
+const Layout = (props) =>  {
+    const { location, title, children } = props
     const rootPath = `${__PATH_PREFIX__}/`
     let header
 
@@ -85,6 +84,6 @@ class Layout extends React.Component {
       </div>
     )
   }
-}
+
 
 export default Layout
