@@ -79,7 +79,7 @@ export const pageQuery = graphql`
       subtite
       image {
         fluid(maxWidth: 700) {
-          ...GatsbyContentfulFluid_tracedSVG
+          tracedSVG
         }
       }
       childContentfulPostContentRichTextNode {
