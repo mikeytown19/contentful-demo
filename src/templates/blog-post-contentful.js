@@ -2,21 +2,26 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { rhythm, scale } from "../utils/typography"
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import Img from 'gatsby-image'
+import { motion, AnimatePresence, useViewportScroll, useTransform  } from 'framer-motion'
+import styled from '@emotion/styled'
 
-class BlogPostContentfulTemplate extends React.Component {
-  render() {
-    const data = this.props.data.contentfulPost
+
+const BlogPostContentfulTemplate = (props) => {
+
+    const { scrollYProgress } = useViewportScroll();
+    const scale = useTransform(scrollYProgress, [0, 1], [0.2, 2]);
+
+    const data = props.data.contentfulPost
     const {author, image, subtite, title} = data
-    const contentfulMarkup = documentToReactComponents(this.props.data.contentfulPost.childContentfulPostContentRichTextNode.json)
-    const post = this.props.data.contentfulPost
-    const siteTitle = this.props.data.site.siteMetadata.title
-    const { previous, next } = this.props.pageContext
+    const contentfulMarkup = documentToReactComponents(props.data.contentfulPost.childContentfulPostContentRichTextNode.json)
+    const post = props.data.contentfulPost
+    const siteTitle = props.data.site.siteMetadata.title
+    const { previous, next } = props.pageContext
 
     return (
-      <Layout location={this.props.location} title={siteTitle}>
+      <Layout location={props.location} title={siteTitle}>
         <SEO
           title={post.title}
           description={post.subtite}
@@ -28,10 +33,22 @@ class BlogPostContentfulTemplate extends React.Component {
             </h1>
 
           </header>
+          <motion.div
+          initial={{ scale: .5 }}
+          animate={{ scale: 1 }}
+          transition={{
+            type: "spring",
+            stiffness: 260,
+            damping: 20,
+            delay: .6
+          }}>
 
-          <section>
-            <Img fluid={image.fluid} />
-          </section>
+              <section>
+              <Img fluid={image.fluid} />
+            </section>
+          </motion.div>
+
+
           <section>
               {contentfulMarkup}
           </section>
@@ -39,6 +56,9 @@ class BlogPostContentfulTemplate extends React.Component {
         <div>
           written by - {author}
         </div>
+
+
+
 
         <nav>
           <ul>
@@ -60,7 +80,6 @@ class BlogPostContentfulTemplate extends React.Component {
         </nav>
       </Layout>
     )
-  }
 }
 
 export default BlogPostContentfulTemplate

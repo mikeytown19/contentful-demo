@@ -1,31 +1,43 @@
 import React from "react"
 import { Link } from "gatsby"
+import { rhythm } from "../utils/typography"
+import { motion, AnimatePresence} from 'framer-motion'
 
-import { rhythm, scale } from "../utils/typography"
+const timeDuration = 0.3
 
-class Layout extends React.Component {
-  render() {
-    const { location, title, children } = this.props
+const variants = {
+  initial: {
+    x: 0,
+    y: 200,
+    opacity: 0,
+  },
+  enter: {
+    x: 0,
+    delay: timeDuration,
+    y: 0,
+    opacity: 1,
+    transition: {
+      opactiy: 1,
+      duration: timeDuration,
+      delay: timeDuration,
+      when: 'beforeChildren',
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: { timeDuration: .1 },
+  },
+}
+
+const Layout = (props) =>  {
+    const { location, title, children } = props
     const rootPath = `${__PATH_PREFIX__}/`
     let header
 
     if (location.pathname === rootPath) {
       header = (
-        <h1
-          style={{
-            ...scale(1.5),
-            marginBottom: rhythm(1.5),
-            marginTop: 0,
-          }}
-        >
-          <Link
-            style={{
-              boxShadow: `none`,
-              textDecoration: `none`,
-              color: `inherit`,
-            }}
-            to={`/`}
-          >
+        <h1>
+          <Link to={`/`} >
             {title}
           </Link>
         </h1>
@@ -38,14 +50,7 @@ class Layout extends React.Component {
             marginTop: 0,
           }}
         >
-          <Link
-            style={{
-              boxShadow: `none`,
-              textDecoration: `none`,
-              color: `inherit`,
-            }}
-            to={`/`}
-          >
+          <Link to={`/`}>
             {title}
           </Link>
         </h3>
@@ -61,11 +66,24 @@ class Layout extends React.Component {
         }}
       >
         <header>{header}</header>
-        <main>{children}</main>
+
+          <AnimatePresence>
+            <motion.main
+              key={location.pathname}
+              variants={variants}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+            >
+              {children}
+            </motion.main>
+        </AnimatePresence>
+
+
 
       </div>
     )
   }
-}
+
 
 export default Layout
