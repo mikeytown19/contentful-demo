@@ -8,20 +8,20 @@ import { motion, AnimatePresence, useViewportScroll, useTransform  } from 'frame
 import styled from '@emotion/styled'
 
 
-const BlogPostContentfulTemplate = (props) => {
+const BlogPostContentfulTemplate = ({ data, pageContext, location }) => {
 
     const { scrollYProgress } = useViewportScroll();
     const scale = useTransform(scrollYProgress, [0, 1], [0.2, 2]);
 
-    const data = props.data.contentfulPost
+    const data = data.contentfulPost
     const {author, image, subtite, title} = data
-    const contentfulMarkup = documentToReactComponents(props.data.contentfulPost.childContentfulPostContentRichTextNode.json)
-    const post = props.data.contentfulPost
-    const siteTitle = props.data.site.siteMetadata.title
-    const { previous, next } = props.pageContext
+    const contentfulMarkup = documentToReactComponents(data.contentfulPost.childContentfulPostContentRichTextNode.json)
+    const post = data.contentfulPost
+    const siteTitle = data.site.siteMetadata.title
+    const { previous, next } = pageContext
 
     return (
-      <Layout location={props.location} title={siteTitle}>
+      <Layout location={location} title={siteTitle}>
         <SEO
           title={post.title}
           description={post.subtite}
